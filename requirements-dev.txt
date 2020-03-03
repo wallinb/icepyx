@@ -1,6 +1,7 @@
 datetime
 fiona
 geopandas
+jupyter_client
 matplotlib
 nbsphinx
 numpydoc
