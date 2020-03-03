@@ -2,6 +2,9 @@ datetime
 fiona
 geopandas
 matplotlib
+nbsphinx
 numpydoc
 numpy
+pillow
 shapely
+sphinx-gallery
