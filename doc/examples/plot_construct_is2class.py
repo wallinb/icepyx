@@ -12,7 +12,7 @@ sys.path.append('../../icepyx/core/')
 
 
 #
-import is2class as ipd
+from icepyx import is2class as ipd
 #
 
 ipdf = ipd.Icesat2Data('ATL06',[-55, 68, -48, 71],['2019-02-20','2019-02-20'], \
