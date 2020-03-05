@@ -1,6 +1,7 @@
 datetime
 fiona
 geopandas
+ipykernel
 jupyter_client
 matplotlib
 nbsphinx
@@ -8,4 +9,5 @@ numpydoc
 numpy
 pillow
 shapely
+sphinx
 sphinx-gallery
