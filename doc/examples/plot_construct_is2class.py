@@ -8,7 +8,7 @@ This example shows how to instantiate an is2class object
 
 import sys
 sys.path.append('../../icepyx/core/')
-
+print(sys.path)
 
 #
 import is2class as ipd
