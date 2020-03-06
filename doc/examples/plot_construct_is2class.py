@@ -17,7 +17,7 @@ try:
 except: 
     pass
 
-sys.path.append(os.path.abspath('../../icepyx/core'))
+sys.path.append(os.path.abspath('/icepyx/core'))
 print(sys.path)
 
 try:
