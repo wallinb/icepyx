@@ -181,10 +181,16 @@ class Granules:
 
         headers = {"Accept": "application/json", "Client-Id": "icepyx"}
         # note we should also check for errors whenever we ping NSIDC-API - make a function to check for errors
+        cmr_scroll_id = None
         while True:
+            if cmr_scroll_id:
+                headers['CMR-Scroll-Id'] = cmr_scroll_id
+
             params = apifmt.combine_params(
-                CMRparams, {k: reqparams[k] for k in ("page_size", "page_num")}
+                CMRparams, {k: reqparams[k] for k in ("page_size")}
             )
+            params['scroll'] = 'true'
+
             response = requests.get(
                 granule_search_url, headers=headers, params=apifmt.to_string(params),
             )
@@ -201,18 +207,22 @@ class Granules:
                 else:  # If no 'errors' key, just reraise original exception
                     raise e
 
+            if not cmr_scroll_id:
+                hits = int(response.headers['CMR-Hits'])
+
+            cmr_scroll_id = response.headers['CMR-Scroll-Id']
+
             results = json.loads(response.content)
-            if not results["feed"]["entry"]:
-                # Out of results, so break out of loop
+            granules = results['feed']['entry']
+            if not granules:
+                # Done scrolling
+                assert (
+                    len(self.avail) == hits
+                ), 'Search failure - unexpected number of results'
                 break
 
             # Collect results and increment page_num
-            self.avail.extend(results["feed"]["entry"])
-            reqparams["page_num"] += 1
-
-        # DevNote: The above calculated page_num is wrong when mod(granule number, page_size)=0.
-        # print(reqparams['page_num'])
-        reqparams["page_num"] = int(np.ceil(len(self.avail) / reqparams["page_size"]))
+            self.avail.extend(granules)
 
         assert (
             len(self.avail) > 0
