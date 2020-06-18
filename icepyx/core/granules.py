@@ -170,9 +170,7 @@ class Granules:
         query.Query.avail_granules
         """
 
-        assert (
-            CMRparams is not None and reqparams is not None
-        ), "Missing required input parameter dictionaries"
+        assert (CMRparams is not None and reqparams is not None), "Missing required input parameter dictionaries"
 
         # if not hasattr(self, 'avail'):
         self.avail = []
@@ -183,7 +181,7 @@ class Granules:
         # note we should also check for errors whenever we ping NSIDC-API - make a function to check for errors
         cmr_scroll_id = None
         while True:
-            if cmr_scroll_id:
+            if cmr_scroll_id is not None:
                 headers['CMR-Scroll-Id'] = cmr_scroll_id
 
             params = apifmt.combine_params(
@@ -207,7 +205,7 @@ class Granules:
                 else:  # If no 'errors' key, just reraise original exception
                     raise e
 
-            if not cmr_scroll_id:
+            if cmr_scroll_id is None:
                 hits = int(response.headers['CMR-Hits'])
 
             cmr_scroll_id = response.headers['CMR-Scroll-Id']
